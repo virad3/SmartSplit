@@ -1,0 +1,5 @@
+{
+  "name": "Smartsplit",
+  "description": "Smartsplit is a smart expense splitting application similar to Splitwise, allowing users to create groups, track expenses, and generate insightful reports with AI-powered summaries.",
+  "requestFramePermissions": []
+}
