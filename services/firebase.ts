@@ -1,6 +1,7 @@
-// FIX: Refactored to use Firebase v8 namespaced API to resolve 'initializeApp' export error.
-import firebase from 'firebase/app';
-import 'firebase/firestore';
+
+// FIX: Changed imports to use Firebase v8 compatibility layer to resolve module resolution errors.
+import firebase from 'firebase/compat/app';
+import 'firebase/compat/firestore';
 import { AppData, User, Group, Expense } from '../types';
 
 // TODO: Replace with your actual Firebase configuration
@@ -13,13 +14,14 @@ const firebaseConfig = {
   appId: "1:1096167114185:web:ee16b7408273661efc5418"
 };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
+// FIX: Updated Firebase initialization to v8 compat syntax.
+if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
 }
-
 const db = firebase.firestore();
 
 const getUsers = async (): Promise<User[]> => {
+  // FIX: Updated to v8 compat syntax.
   const usersCol = db.collection('users');
   const userSnapshot = await usersCol.get();
   // Manually create plain objects to strip any Firebase-specific properties/prototypes
@@ -36,6 +38,7 @@ const getUsers = async (): Promise<User[]> => {
 };
 
 const getGroups = async (): Promise<Group[]> => {
+  // FIX: Updated to v8 compat syntax.
   const groupsCol = db.collection('groups');
   const groupSnapshot = await groupsCol.get();
   // Manually create plain objects
@@ -52,6 +55,7 @@ const getGroups = async (): Promise<Group[]> => {
 };
 
 const getExpenses = async (): Promise<Expense[]> => {
+  // FIX: Updated to v8 compat syntax.
   const expensesCol = db.collection('expenses');
   const expenseSnapshot = await expensesCol.get();
   // Manually create plain objects
@@ -87,6 +91,7 @@ export const getAllData = async (): Promise<AppData> => {
 };
 
 export const findUserByIdentifier = async (identifier: string): Promise<User | null> => {
+  // FIX: Updated to v8 compat syntax.
   const usersRef = db.collection("users");
   const isEmail = /\S+@\S+\.\S+/.test(identifier);
   
@@ -111,18 +116,25 @@ export const findUserByIdentifier = async (identifier: string): Promise<User | n
 
 
 export const setUser = (user: User) => {
-  return db.collection('users').doc(user.id).set(user, { merge: true });
+  // FIX: Updated to v8 compat syntax.
+  const userRef = db.collection('users').doc(user.id);
+  return userRef.set(user, { merge: true });
 };
 
 export const setGroup = (group: Group) => {
-  return db.collection('groups').doc(group.id).set(group, { merge: true });
+  // FIX: Updated to v8 compat syntax.
+  const groupRef = db.collection('groups').doc(group.id);
+  return groupRef.set(group, { merge: true });
 };
 
 export const setExpense = (expense: Expense) => {
-  return db.collection('expenses').doc(expense.id).set(expense);
+  // FIX: Updated to v8 compat syntax.
+  const expenseRef = db.collection('expenses').doc(expense.id);
+  return expenseRef.set(expense);
 };
 
 export const createGroupWithUsers = async (group: Group, newUsers: User[]) => {
+    // FIX: Updated to v8 compat syntax.
     const batch = db.batch();
     
     // Add new users to the batch
